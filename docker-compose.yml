@@ -1,0 +1,55 @@
+version: "2.2"
+services:
+  eurekaserver:
+    build: ./EurekaServer/
+    ports:
+      - "8761:8761"
+    image: "eureka"
+ 
+  gateway:
+    build: ./gatewayapi/
+    ports:
+      - "9191:9191"
+    environment:
+      eureka.client.serviceUrl.defaultZone: http://eurekaserver:8761/eureka/
+      spring.cloud.gateway.routes.uri: http://user-service:3000
+    image: "api-gateway" 
+
+  quiz:
+    build: ./Quiz_SpringBoot-quiz/
+    ports:
+      - "9001:9001"
+    environment:
+      eureka.client.serviceUrl.defaultZone: http://eurekaserver:8761/eureka/
+    image: "quiz-service"
+
+  category-service:
+    build: ./MS_category/
+    ports:
+      - "8089:8089"
+    environment:
+      eureka.client.serviceUrl.defaultZone: http://eurekaserver:8761/eureka/
+    image: "category-service"    
+
+  user-service:
+    build: ./MS_user/
+    ports:
+      - "3000:3000"
+    environment:
+      eureka.client.serviceUrl.defaultZone: http://eurekaserver:8761/eureka/
+    image: "user-service"
+
+  docker-blog:
+    build: ./blog-service/
+    ports:
+      - "9003:9003"
+    environment:
+      eureka.client.serviceUrl.defaultZone: http://eurekaserver:8761/eureka/
+    image: "docker-blog"
+  docker-comment:
+    build: ./quiz/
+    ports:
+      - "8083:8083"
+    environment:
+      eureka.client.serviceUrl.defaultZone: http://eurekaserver:8761/eureka/
+    image: "docker-comment"
